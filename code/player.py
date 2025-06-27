@@ -55,6 +55,12 @@ class Player(Entity):
         self.current_energy = self.stats["energy"]
         self.exp = 99
         self.current_speed = self.stats["speed"]
+        self.hurt_time = None
+        self.vulnerable = True
+        self.invincibility_time = 500
+
+    def get_full_damage(self):
+        return self.stats["attack"] + weapon_data[self.weapon]["damage"]
 
     def animate(self):
         animation = self.animations[self.status]
@@ -64,6 +70,13 @@ class Player(Entity):
 
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
+
+        alpha = 255
+        if not self.vulnerable:
+            alpha = self.wave_value()
+
+        self.image.set_alpha(alpha)
+
 
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0 and "idle" not in self.status:
@@ -145,7 +158,7 @@ class Player(Entity):
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
-        if self.attacking and (current_time - self.attack_time) >= self.attack_cooldown:
+        if self.attacking and (current_time - self.attack_time) >= self.attack_cooldown + weapon_data[self.weapon]["cooldown"]:
             self.attacking = False
             self.destroy_attack()
 
@@ -154,6 +167,10 @@ class Player(Entity):
 
         if not self.can_switch_magic and (current_time - self.magic_switch_time) >= self.switch_duration_cooldown:
             self.can_switch_magic = True
+
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invincibility_time:
+                self.vulnerable = True
 
     def update(self):
         self.input()
