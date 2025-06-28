@@ -22,12 +22,12 @@ class Entity(pygame.sprite.Sprite):
 
     def collision(self, direction):
         for sprite in self.obstacle_sprites:
-            if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy":
+            if sprite.__class__.__name__ == "Enemy":
                 if (
                     self.name == "Player"
-                    or (hasattr(sprite, "id") and sprite.id == self.id)
-                    or (hasattr(self, "monster_name") and self.monster_name == "spirit")
-                    or (hasattr(sprite, "monster_name") and sprite.monster_name == "spirit")
+                    or sprite.id == self.id
+                    or (self.name == "Enemy" and self.monster_name == "spirit") #this is to fix incorrect spawn
+                    or sprite.monster_name == "spirit"
                 ):
                     continue
 
