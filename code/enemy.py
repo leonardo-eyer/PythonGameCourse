@@ -29,7 +29,7 @@ class Enemy(Entity):
         self.notice_radius = monster_info["notice_radius"]
         self.attack_type = monster_info["attack_type"]
         self.can_attack = True
-        self.attack_cooldown = 400
+        self.attack_cooldown = 700
         self.attack_time = None
         self.vulnerable = True
         self.hit_time = None
@@ -40,11 +40,7 @@ class Enemy(Entity):
     def get_damage(self, player, attack_type):
         if self.vulnerable:
             self.direction = self.get_player_position(player)[1]
-            if attack_type == "weapon":
-                self.health -= player.get_full_damage()
-            else:
-                pass #magic
-
+            self.health -= player.get_full_damage(attack_type)
             self.hit_time = pygame.time.get_ticks()
             self.vulnerable = False
 
@@ -105,7 +101,6 @@ class Enemy(Entity):
 
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center=self.hitbox.center)
-
         alpha = 255
         if not self.vulnerable:
             alpha = self.wave_value()

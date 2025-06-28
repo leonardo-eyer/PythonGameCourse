@@ -2,7 +2,6 @@ WIDTH       = 1280
 HEIGHT      = 720
 FPS         = 60
 TILE_SIZE   = 64
-
 #ui
 BAR_HEIGHT = 20
 HEALTH_BAR_WIDTH = 200

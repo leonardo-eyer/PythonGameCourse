@@ -59,8 +59,14 @@ class Player(Entity):
         self.vulnerable = True
         self.invincibility_time = 500
 
-    def get_full_damage(self):
-        return self.stats["attack"] + weapon_data[self.weapon]["damage"]
+    def get_full_damage(self, attack_type):
+        damage = 0
+        if attack_type == "weapon":
+            damage =  self.stats["attack"] + weapon_data[self.weapon]["damage"]
+        elif attack_type == "magic":
+            damage =  self.stats["magic"] + magic_data[self.magic]["strength"]
+
+        return damage
 
     def animate(self):
         animation = self.animations[self.status]
@@ -96,6 +102,13 @@ class Player(Entity):
         else:
             if "attack" in self.status:
                 self.status = self.status.replace("_attack", '')
+
+    def energy_regen(self):
+        if self.current_energy < self.stats["energy"]:
+            self.current_energy += 0.01 * self.stats["magic"]
+        else:
+            self.current_energy = self.stats["energy"]
+
 
     def import_player_assets(self):
         folder_path = "../graphics/player/"
@@ -178,3 +191,4 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.stats["speed"])
+        self.energy_regen()

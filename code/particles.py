@@ -33,6 +33,7 @@ class AnimationPlayer:
             )
         }
 
+
     def reflect_images(self, frames):
         new_frames = []
         for frame in frames:
@@ -57,6 +58,7 @@ class Particle(pygame.sprite.Sprite):
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
+        self.sprite_type = "magic"
 
 
     def animate(self):

@@ -29,7 +29,6 @@ class Entity(pygame.sprite.Sprite):
                 ):
                     continue
 
-
             if sprite.hitbox.colliderect(self.hitbox):
                 if direction == "horizontal":
                     if self.direction.x > 0: #moving right
