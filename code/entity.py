@@ -2,8 +2,10 @@ import pygame
 from math import sin
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, groups):
+    def __init__(self, id, name, groups):
         super().__init__(groups)
+        self.id = id
+        self.name = name
         self.frame_index = 0
         self.animation_speed = 0.15
         self.direction = pygame.math.Vector2()
@@ -20,6 +22,16 @@ class Entity(pygame.sprite.Sprite):
 
     def collision(self, direction):
         for sprite in self.obstacle_sprites:
+            if hasattr(sprite, "sprite_type") and sprite.sprite_type == "enemy":
+                if (
+                    self.name == "Player"
+                    or (hasattr(sprite, "id") and sprite.id == self.id)
+                    or (hasattr(self, "monster_name") and self.monster_name == "spirit")
+                    or (hasattr(sprite, "monster_name") and sprite.monster_name == "spirit")
+                ):
+                    continue
+
+
             if sprite.hitbox.colliderect(self.hitbox):
                 if direction == "horizontal":
                     if self.direction.x > 0: #moving right

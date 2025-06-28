@@ -4,8 +4,8 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-    def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player, death_particles):
-        super().__init__(groups)
+    def __init__(self, id, monster_name, pos, groups, obstacle_sprites, damage_player, death_particles):
+        super().__init__(id, "Enemy", groups)
         self.sprite_type = "enemy"
         self.animations = {
             "idle": [],

@@ -49,6 +49,7 @@ class Level:
             "objects": import_folder("../graphics/objects")
         }
 
+        i = 0
         for style,layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
@@ -76,6 +77,7 @@ class Level:
                         if style == "entities":
                             if col == "394":
                                 self.player = Player(
+                                    i,
                                     (x,y),
                                     [self.visible_sprites],
                                     self.obstacle_sprites,
@@ -89,13 +91,15 @@ class Level:
                                 elif col == "392": monster_name = "raccoon"
                                 else: monster_name = "squid"
                                 Enemy(
+                                    i,
                                     monster_name,
                                     (x,y),
-                                    [self.visible_sprites, self.attackable_sprites],
+                                    [self.visible_sprites, self.attackable_sprites, self.obstacle_sprites],
                                     self.obstacle_sprites,
                                     self.damage_player,
                                     self.trigger_death_particles
                                 )
+                            i+=1
 
     def damage_player(self, amount, attack_type):
         if self.player.vulnerable:
