@@ -26,8 +26,6 @@ class Entity(pygame.sprite.Sprite):
                 if (
                     self.name == "Player"
                     or sprite.id == self.id
-                    or (self.name == "Enemy" and self.monster_name == "spirit") #this is to fix incorrect spawn
-                    or sprite.monster_name == "spirit"
                 ):
                     continue
 
