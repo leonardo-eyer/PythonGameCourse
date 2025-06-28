@@ -4,10 +4,11 @@ from tile import Tile
 from player import Player
 from debug import debug
 from support import  *
-from random import choice
+from random import choice, randint
 from weapon import Weapon
 from ui import UI
 from enemy import Enemy
+from particles import AnimationPlayer
 
 
 class Level:
@@ -21,7 +22,7 @@ class Level:
         self.attackable_sprites = pygame.sprite.Group()
         self.create_map()
         self.ui = UI()
-
+        self.animation_player = AnimationPlayer()
 
 
     def create_attack(self):
@@ -92,7 +93,8 @@ class Level:
                                     (x,y),
                                     [self.visible_sprites, self.attackable_sprites],
                                     self.obstacle_sprites,
-                                    self.damage_player
+                                    self.damage_player,
+                                    self.trigger_death_particles
                                 )
 
     def damage_player(self, amount, attack_type):
@@ -100,6 +102,7 @@ class Level:
             self.player.current_health -= amount
             self.player.vulnerable = False
             self.player.hurt_time = pygame.time.get_ticks()
+            self.animation_player.create_particles(attack_type, self.player.rect.center, self.visible_sprites)
 
 
     def player_attack_logic(self):
@@ -109,10 +112,16 @@ class Level:
                 if collision_sprites:
                     for target in collision_sprites:
                         if target.sprite_type == "grass":
+                            pos = target.rect.center
+                            offset = pygame.math.Vector2(0, 75)
+                            for leaf in range(randint(3,5)):
+                                self.animation_player.grass_particles(pos - offset, [self.visible_sprites])
                             target.kill()
                         else:
                             target.get_damage(self.player, attack_sprite.sprite_type)
 
+    def trigger_death_particles(self, pos, particle_type):
+        self.animation_player.create_particles(particle_type, pos, self.visible_sprites)
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
