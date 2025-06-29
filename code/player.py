@@ -72,6 +72,8 @@ class Player(Entity):
         self.hurt_time = None
         self.vulnerable = True
         self.invincibility_time = 500
+        self.weapon_attack_sound = pygame.mixer.Sound("../audio/sword.wav")
+        self.weapon_attack_sound.set_volume(0.03)
 
     def get_full_damage(self, attack_type):
         damage = 0
@@ -159,6 +161,7 @@ class Player(Entity):
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.weapon_attack_sound.play()
 
             if keys[pygame.K_LCTRL]:
                 self.attacking = True

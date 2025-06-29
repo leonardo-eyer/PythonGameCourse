@@ -37,9 +37,16 @@ class Enemy(Entity):
         self.damage_player = damage_player
         self.death_particles = death_particles
         self.add_exp = add_exp
+        self.death_sound = pygame.mixer.Sound("../audio/death.wav")
+        self.death_sound.set_volume(0.03)
+        self.hit_sound = pygame.mixer.Sound("../audio/hit.wav")
+        self.hit_sound.set_volume(0.03)
+        self.attack_sound = pygame.mixer.Sound(monster_info["attack_sound"])
+        self.attack_sound.set_volume(0.03)
 
     def get_damage(self, player, attack_type):
         if self.vulnerable:
+            self.hit_sound.play()
             self.direction = self.get_player_position(player)[1]
             self.health -= player.get_full_damage(attack_type)
             self.hit_time = pygame.time.get_ticks()
@@ -53,6 +60,7 @@ class Enemy(Entity):
     def check_death(self):
         if self.health <= 0:
             self.add_exp(self.exp)
+            self.death_sound.play()
             self.death_particles(self.rect.center, self.monster_name)
             self.kill()
 
@@ -86,6 +94,7 @@ class Enemy(Entity):
 
     def actions(self, player):
         if self.status == "attack":
+            self.attack_sound.play()
             self.attack_time = pygame.time.get_ticks()
             self.damage_player(self.damage, self.attack_type)
         elif self.status == "move":
