@@ -51,9 +51,23 @@ class Player(Entity):
             "magic":4,
             "speed":6
         }
+        self.max_stats = {
+            "health": 300,
+            "energy": 140,
+            "attack": 20,
+            "magic": 10,
+            "speed": 10
+        }
+        self.upgrade_cost = {
+            "health": 100,
+            "energy": 100,
+            "attack": 100,
+            "magic": 100,
+            "speed": 100
+        }
         self.current_health = self.stats["health"]
         self.current_energy = self.stats["energy"]
-        self.exp = 99
+        self.exp = 500
         self.current_speed = self.stats["speed"]
         self.hurt_time = None
         self.vulnerable = True
@@ -83,6 +97,11 @@ class Player(Entity):
 
         self.image.set_alpha(alpha)
 
+    def get_value_by_idx(self, index):
+        return list(self.stats.values())[index]
+
+    def get_cost_by_index(self, index):
+        return list(self.upgrade_cost.values())[index]
 
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0 and "idle" not in self.status:
